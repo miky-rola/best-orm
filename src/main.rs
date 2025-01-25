@@ -62,7 +62,8 @@ pub trait Model: Sized + Send + Sync {
     async fn delete(&self, db: &DatabaseConnection) -> Result<(), OrmError>;
     async fn delete_by_id(db: &DatabaseConnection, id: &str) -> Result<(), OrmError>;
     
-    async fn query(db: &DatabaseConnection) -> QueryBuilder<Self>;
+    // Synchronous method
+    fn query(db: &DatabaseConnection) -> QueryBuilder<Self>;
     
     fn validate(&self) -> Result<(), OrmError>;
     fn table_name() -> String;
@@ -100,7 +101,8 @@ impl<T: Model> QueryBuilder<T> {
         self
     }
     
-    pub async fn execute(self, _db: &DatabaseConnection) -> Result<Vec<T>, OrmError> {
+    pub async fn execute(self, db: &DatabaseConnection) -> Result<Vec<T>, OrmError> {
+        // Implement the actual database query logic here
         unimplemented!()
     }
 }
@@ -148,7 +150,8 @@ impl Model for SomeModel {
         unimplemented!()
     }
 
-    async fn query(db: &DatabaseConnection) -> QueryBuilder<Self> {
+    // Synchronous implementation
+    fn query(_db: &DatabaseConnection) -> QueryBuilder<Self> {
         QueryBuilder {
             conditions: Vec::new(),
             limit: None,
