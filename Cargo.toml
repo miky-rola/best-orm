@@ -2,5 +2,7 @@
 name = "best-orm"
 version = "0.1.0"
 edition = "2021"
+authors = ["miky rola mikyrola8@gmail.com"]
+description = ""
 
 [dependencies]
