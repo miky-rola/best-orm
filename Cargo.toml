@@ -13,4 +13,4 @@ uuid = { version = "1", features = ["serde"] }
 chrono = { version = "0.4", features = ["serde"] }
 serde = { version = "1", features = ["derive"] }
 thiserror = "1.0"
-sea-query= "0.30"
+sea-query = "0.30"
