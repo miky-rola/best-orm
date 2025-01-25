@@ -1,7 +1,7 @@
 use std::collections::HashMap;
 use sqlx::{mysql::MySqlPool, postgres::PgPool};
 use async_trait::async_trait;
-use sea_query::{Iden, Condition, Expr};
+use sea_query::{Iden, Condition, Expr, Alias};
 use thiserror::Error;
 
 #[derive(Debug, Error)]
@@ -79,7 +79,11 @@ pub struct QueryBuilder<T: Model> {
 
 impl<T: Model> QueryBuilder<T> {
     pub fn where_eq(mut self, column: &str, value: &str) -> Self {
-        self.conditions.push(Expr::col(column).eq(value));
+        // Use `Alias` to convert the column name into an `Iden` type
+        let column_alias = Alias::new(column);
+        // Construct a `Condition` using `Expr::col` and `Condition::all`
+        let condition = Condition::all().add(Expr::col(column_alias).eq(value));
+        self.conditions.push(condition);
         self
     }
     
