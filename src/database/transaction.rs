@@ -1,4 +1,4 @@
-use sqlx::{Transaction, Postgres, MySql};
+use sqlx::{Transaction, Postgres};
 use crate::database::connection::{DatabaseConnection, OrmError};
 use crate::database::connection::DatabaseType;
 
