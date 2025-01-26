@@ -1,10 +1,10 @@
 use sea_query::{Condition, Expr, Alias, Query, MysqlQueryBuilder, PostgresQueryBuilder};
 use async_trait::async_trait;
-use sqlx::{mysql::MySqlPool, postgres::PgPool, FromRow};
+use sqlx::{mysql::MySqlPool, postgres::PgPool, Row, FromRow};
 use crate::database::connection::{DatabaseConnection, OrmError, DatabaseType};
 use crate::models::base_model::Model;
 
-pub struct QueryBuilder<T: Model> {
+pub struct QueryBuilder<T: Model + for<'r> FromRow<'r, sqlx::postgres::PgRow>> {
     conditions: Vec<Condition>,
     limit: Option<u64>,
     offset: Option<u64>,
@@ -12,7 +12,17 @@ pub struct QueryBuilder<T: Model> {
     _marker: std::marker::PhantomData<T>,
 }
 
-impl<T: Model> QueryBuilder<T> {
+impl<T: Model + for<'r> FromRow<'r, sqlx::postgres::PgRow>> QueryBuilder<T> {
+    pub fn new() -> Self {
+        Self {
+            conditions: Vec::new(),
+            limit: None,
+            offset: None,
+            order_by: None,
+            _marker: std::marker::PhantomData,
+        }
+    }
+
     pub fn where_eq(mut self, column: &str, value: &str) -> Self {
         let column_alias = Alias::new(column);
         let condition = Condition::all().add(Expr::col(column_alias).eq(value));
@@ -69,18 +79,17 @@ impl<T: Model> QueryBuilder<T> {
         // Execute the query
         match &db.connection {
             DatabaseType::Postgres(pool) => {
-                let rows = sqlx::query_as::<_, T>(&sql)
+                let rows = sqlx::query(&sql)
                     .fetch_all(pool)
                     .await
-                    .map_err(|e| OrmError::QueryError(e.to_string()))?;
+                    .map_err(|e| OrmError::QueryError(e.to_string()))?
+                    .into_iter()
+                    .map(|row| T::from_row(&row).expect("Failed to convert row"))
+                    .collect();
                 Ok(rows)
             },
-            DatabaseType::MySql(pool) => {
-                let rows = sqlx::query_as::<_, T>(&sql)
-                    .fetch_all(pool)
-                    .await
-                    .map_err(|e| OrmError::QueryError(e.to_string()))?;
-                Ok(rows)
+            DatabaseType::MySql(_) => {
+                Err(OrmError::QueryError("MySQL support not fully implemented".to_string()))
             },
         }
     }

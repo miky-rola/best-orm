@@ -1,11 +1,12 @@
 use std::collections::HashMap;
 use async_trait::async_trait;
 use sea_query::Iden;
+use sqlx::{FromRow, postgres::PgRow};
 use crate::database::connection::{DatabaseConnection, OrmError};
 use crate::database::query_builder::QueryBuilder;
 
 #[async_trait]
-pub trait Model: Sized + Send + Sync {
+pub trait Model: Sized + Send + Sync + for<'r> FromRow<'r, PgRow> {
     type Columns: Iden;
     
     async fn find_by(db: &DatabaseConnection, conditions: &HashMap<String, String>) -> Result<Vec<Self>, OrmError>;
