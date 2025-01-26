@@ -8,7 +8,6 @@ EvsORM is a lightweight and flexible Object-Relational Mapping (ORM) library for
 - **Query Building**: Easily build complex SQL queries using a fluent API.
 - **Transactions**: Supports database transactions for atomic operations.
 - **Model Validation**: Built-in support for model validation.
-- **Async/Await**: Fully asynchronous using `async`/`await`.
 
 ## Installation
 
@@ -19,8 +18,6 @@ Add the following dependencies to your `Cargo.toml` file:
 sqlx = { version = "0.7", features = ["postgres", "mysql", "runtime-tokio-native-tls"] }
 sea-query = "0.28"
 thiserror = "1.0"
-async-trait = "0.1"
-```
 
 ## Usage
 
