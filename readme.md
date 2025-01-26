@@ -18,7 +18,7 @@ Add the following dependencies to your `Cargo.toml` file:
 sqlx = { version = "0.7", features = ["postgres", "mysql", "runtime-tokio-native-tls"] }
 sea-query = "0.28"
 thiserror = "1.0"
-
+```
 ## Usage
 
 ### 1. Define Your Model
@@ -38,7 +38,6 @@ struct User {
     email: String,
 }
 
-#[async_trait::async_trait]
 impl Model for User {
     type Columns = UserColumns;
 
