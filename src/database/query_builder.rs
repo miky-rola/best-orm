@@ -1,6 +1,6 @@
 use sea_query::{Condition, Expr, Alias, Query, MysqlQueryBuilder, PostgresQueryBuilder};
-use async_trait::async_trait;
-use sqlx::{mysql::MySqlPool, postgres::PgPool, Row, FromRow};
+// use async_trait::async_trait;
+use sqlx::FromRow;
 use crate::database::connection::{DatabaseConnection, OrmError, DatabaseType};
 use crate::models::base_model::Model;
 
