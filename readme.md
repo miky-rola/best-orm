@@ -1,6 +1,6 @@
-# BestORM
+# EvsORM
 
-BestORM is a lightweight and flexible Object-Relational Mapping (ORM) library for Rust, designed to simplify database interactions with support for PostgreSQL and MySQL. It provides a simple API for querying, inserting, updating, and deleting records, as well as managing transactions.
+EvsORM is a lightweight and flexible Object-Relational Mapping (ORM) library for Rust, designed to simplify database interactions with support for PostgreSQL and MySQL. It provides a simple API for querying, inserting, updating, and deleting records, as well as managing transactions.
 
 ## Features
 
