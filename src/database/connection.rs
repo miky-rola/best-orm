@@ -24,21 +24,20 @@ pub struct DatabaseConnection {
 }
 
 impl DatabaseConnection {
-    pub async fn new(db_type: &str, connection_string: &str) -> Result<Self, OrmError> {
+    pub async fn new(db_type: DatabaseType, connection_string: &str) -> Result<Self, OrmError> {
         match db_type {
-            "postgres" => {
+            DatabaseType::Postgres(_)  => {
                 let pool = PgPool::connect(connection_string)
                     .await
                     .map_err(|e| OrmError::ConnectionError(e.to_string()))?;
                 Ok(Self { connection: DatabaseType::Postgres(pool) })
             },
-            "mysql" => {
+            DatabaseType::MySql(_) => {
                 let pool = MySqlPool::connect(connection_string)
                     .await
                     .map_err(|e| OrmError::ConnectionError(e.to_string()))?;
                 Ok(Self { connection: DatabaseType::MySql(pool) })
             },
-            _ => Err(OrmError::ConnectionError("Unsupported database type".to_string()))
         }
     }
 }
