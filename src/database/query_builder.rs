@@ -49,20 +49,16 @@ impl<T: Model + for<'r> FromRow<'r, sqlx::postgres::PgRow>> QueryBuilder<T> {
         let table_name = T::table_name();
         let mut query = Query::select();
 
-        // Select all columns
         query.from(Alias::new(&table_name));
 
-        // Apply conditions
         for condition in self.conditions {
             query.cond_where(condition);
         }
 
-        // Apply order by
         if let Some((column, descending)) = self.order_by {
             query.order_by(Alias::new(&column), if descending { sea_query::Order::Desc } else { sea_query::Order::Asc });
         }
 
-        // Apply limit and offset
         if let Some(limit) = self.limit {
             query.limit(limit);
         }
@@ -70,13 +66,11 @@ impl<T: Model + for<'r> FromRow<'r, sqlx::postgres::PgRow>> QueryBuilder<T> {
             query.offset(offset);
         }
 
-        // Build the SQL query based on the database type
         let sql = match &db.connection {
             DatabaseType::Postgres(_) => query.to_string(PostgresQueryBuilder),
             DatabaseType::MySql(_) => query.to_string(MysqlQueryBuilder),
         };
 
-        // Execute the query
         match &db.connection {
             DatabaseType::Postgres(pool) => {
                 let rows = sqlx::query(&sql)
