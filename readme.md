@@ -154,10 +154,6 @@ commit_transaction(transaction)
     .expect("Failed to commit transaction");
 ```
 
-## Examples
-
-Check out the `examples` directory for complete examples of how to use BestORM.
-
 ## Contributing
 
 Contributions are welcome! Please open an issue or submit a pull request.
