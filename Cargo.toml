@@ -3,7 +3,7 @@ name = "best-orm"
 version = "0.1.0"
 edition = "2021"
 authors = ["miky rola <mikyrola8@gmail.com>"]
-description = "BestORM is a lightweight and flexible Object-Relational Mapping (ORM) library for Rust, designed to simplify database interactions with support for PostgreSQL and MySQL"
+description = "EvsORM is a lightweight and flexible Object-Relational Mapping (ORM) library for Rust, designed to simplify database interactions with support for PostgreSQL and MySQL"
 
 [dependencies]
 sqlx = { version = "0.7", features = ["runtime-tokio-native-tls", "mysql", "postgres"] }
